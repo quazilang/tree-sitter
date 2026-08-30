@@ -1,9 +1,9 @@
 {
-    "name": "tree-sitter-void",
+    "name": "tree-sitter-quazi",
     "version": "0.1.0",
     "author": "namnam1105",
     "license": "0BSD",
-    "description": "Tree-sitter grammar for the Void programming language",
+    "description": "Tree-sitter grammar for the Quazi programming language",
     "main": "bindings/node",
     "scripts": {
         "build": "tree-sitter generate && node-gyp build",
@@ -17,9 +17,9 @@
     },
     "tree-sitter": [
         {
-            "scope": "source.void",
+            "scope": "source.quazi",
             "file-types": [
-                "void"
+                "qz"
             ],
             "highlights": "queries/highlights.scm",
             "locals": "queries/locals.scm"

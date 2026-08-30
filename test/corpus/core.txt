@@ -1,0 +1,74 @@
+==================
+imports, generic types, methods, and indexing
+==================
+
+import std.io;
+
+fn main() i32 {
+    var triples: Array[[i32; 3]] = Array.new();
+    triples.push([1, 2, 3]);
+    const first = triples[0];
+    io.println("{}", first[1]);
+    ret 0;
+}
+
+---
+
+(source_file
+  (import_decl
+    (import_path
+      (identifier)
+      (identifier)))
+  (fn_decl
+    (identifier)
+    (block
+      (var_stmt
+        (identifier)
+        (named_type
+          (qualified_identifier
+            (identifier))
+          (array_type
+            (integer_literal)))
+        (call_expr
+          (field_expr
+            (identifier)
+            (identifier))))
+      (expr_stmt
+        (call_expr
+          (field_expr
+            (identifier)
+            (identifier))
+          (array_lit
+            (integer_literal)
+            (integer_literal)
+            (integer_literal))))
+      (const_stmt
+        (identifier)
+        (index_expr
+          (identifier)
+          (integer_literal)))
+      (expr_stmt
+        (call_expr
+          (field_expr
+            (identifier)
+            (identifier))
+          (string_literal)
+          (index_expr
+            (identifier)
+            (integer_literal))))
+      (return_stmt
+        (integer_literal)))))
+
+==================
+incomplete function body recovers
+==================
+
+fn main() i32 {
+    const value =
+
+---
+
+(source_file
+  (ERROR
+    (identifier)
+    (identifier)))

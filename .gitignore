@@ -134,6 +134,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Node development dependencies
+node_modules/
+
 # Distribution / packaging
 .Python
 build/
@@ -342,4 +345,3 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-

@@ -1,10 +1,10 @@
 {
   "grammars": [
     {
-      "name": "void",
-      "camelcase": "void",
-      "scope": "source.void",
-      "file-types": ["void"],
+      "name": "quazi",
+      "camelcase": "Quazi",
+      "scope": "source.quazi",
+      "file-types": ["qz"],
       "highlights": "queries/highlights.scm",
       "locals": "queries/locals.scm"
     }
@@ -12,6 +12,6 @@
   "metadata": {
     "version": "0.1.0",
     "license": "0BSD",
-    "description": "void programming language grammar"
+    "description": "Quazi programming language grammar"
   }
 }

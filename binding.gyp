@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "tree_sitter_void_binding",
+      "target_name": "tree_sitter_quazi_binding",
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "src"
