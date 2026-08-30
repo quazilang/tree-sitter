@@ -72,3 +72,21 @@ fn main() i32 {
   (ERROR
     (identifier)
     (identifier)))
+
+==================
+trait signatures use named parameters
+==================
+
+pub trait ReadableConfig {
+    fn parse_string(content: str) void;
+}
+
+---
+
+(source_file
+  (trait_decl
+    (identifier)
+    (trait_method
+      (identifier)
+      (param
+        (identifier)))))

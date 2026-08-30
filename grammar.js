@@ -157,9 +157,9 @@ module.exports = grammar({
       field('name', $.identifier),
       optional($.generic_params),
       '(',
-      commaSep($._type),
+      commaSep($.param),
       ')',
-      $._type,
+      optional(field('return_type', $._type)),
       ';',
     ),
 

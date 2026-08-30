@@ -6121,6 +6121,120 @@
             "named": true
           }
         ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "any",
+            "named": false
+          },
+          {
+            "type": "array_type",
+            "named": true
+          },
+          {
+            "type": "bool",
+            "named": false
+          },
+          {
+            "type": "bytes",
+            "named": false
+          },
+          {
+            "type": "dyn_type",
+            "named": true
+          },
+          {
+            "type": "f16",
+            "named": false
+          },
+          {
+            "type": "f32",
+            "named": false
+          },
+          {
+            "type": "f64",
+            "named": false
+          },
+          {
+            "type": "flexible_array_type",
+            "named": true
+          },
+          {
+            "type": "fn_type",
+            "named": true
+          },
+          {
+            "type": "i16",
+            "named": false
+          },
+          {
+            "type": "i32",
+            "named": false
+          },
+          {
+            "type": "i64",
+            "named": false
+          },
+          {
+            "type": "i8",
+            "named": false
+          },
+          {
+            "type": "isize",
+            "named": false
+          },
+          {
+            "type": "named_type",
+            "named": true
+          },
+          {
+            "type": "never_type",
+            "named": true
+          },
+          {
+            "type": "ptr_type",
+            "named": true
+          },
+          {
+            "type": "ref_type",
+            "named": true
+          },
+          {
+            "type": "slice_type",
+            "named": true
+          },
+          {
+            "type": "str",
+            "named": false
+          },
+          {
+            "type": "u16",
+            "named": false
+          },
+          {
+            "type": "u32",
+            "named": false
+          },
+          {
+            "type": "u64",
+            "named": false
+          },
+          {
+            "type": "u8",
+            "named": false
+          },
+          {
+            "type": "usize",
+            "named": false
+          },
+          {
+            "type": "void",
+            "named": false
+          }
+        ]
       }
     },
     "children": {
@@ -6128,43 +6242,11 @@
       "required": false,
       "types": [
         {
-          "type": "array_type",
-          "named": true
-        },
-        {
-          "type": "dyn_type",
-          "named": true
-        },
-        {
-          "type": "flexible_array_type",
-          "named": true
-        },
-        {
-          "type": "fn_type",
-          "named": true
-        },
-        {
           "type": "generic_params",
           "named": true
         },
         {
-          "type": "named_type",
-          "named": true
-        },
-        {
-          "type": "never_type",
-          "named": true
-        },
-        {
-          "type": "ptr_type",
-          "named": true
-        },
-        {
-          "type": "ref_type",
-          "named": true
-        },
-        {
-          "type": "slice_type",
+          "type": "param",
           "named": true
         }
       ]

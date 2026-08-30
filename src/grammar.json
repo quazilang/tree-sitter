@@ -933,7 +933,7 @@
               "members": [
                 {
                   "type": "SYMBOL",
-                  "name": "_type"
+                  "name": "param"
                 },
                 {
                   "type": "REPEAT",
@@ -946,7 +946,7 @@
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "_type"
+                        "name": "param"
                       }
                     ]
                   }
@@ -963,8 +963,20 @@
           "value": ")"
         },
         {
-          "type": "SYMBOL",
-          "name": "_type"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "return_type",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_type"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",
