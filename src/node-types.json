@@ -3410,6 +3410,10 @@
       "required": true,
       "types": [
         {
+          "type": "attribute",
+          "named": true
+        },
+        {
           "type": "glob_import",
           "named": true
         },

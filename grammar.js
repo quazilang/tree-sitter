@@ -42,6 +42,10 @@ module.exports = grammar({
 
     // import a.b.{x, y};  /  import a.b.*;  /  import a.b as c;  /  import a.b;
     import_decl: $ => seq(
+      // Imports participate in target selection just like declarations.  Keep
+      // arbitrary attributes in the concrete tree so editors do not report
+      // valid `@cfg … import` forms as syntax errors.
+      repeat($.attribute),
       optional('pub'),
       'import',
       $.import_path,

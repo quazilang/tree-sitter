@@ -60,6 +60,27 @@ fn main() i32 {
         (integer_literal)))))
 
 ==================
+conditional public import
+==================
+
+@cfg(target_os="windows")
+pub import std.windows.*;
+
+---
+
+(source_file
+  (import_decl
+    (attribute
+      (identifier)
+      (attr_arg
+        (identifier)
+        (string_literal)))
+    (import_path
+      (identifier)
+      (identifier))
+    (glob_import)))
+
+==================
 incomplete function body recovers
 ==================
 
