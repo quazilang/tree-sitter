@@ -61,7 +61,7 @@ module.exports = grammar({
     attribute: $ => seq(
       '@',
       field('name', $.identifier),
-      optional(seq('(', commaSep($.attr_arg), ')')),
+      optional(seq('(', commaSep($.attr_arg), optional(','), ')')),
     ),
 
     attr_arg: $ => choice(
@@ -124,7 +124,14 @@ module.exports = grammar({
       field('name', $.identifier),
       ':',
       field('type', $._type),
-      optional(seq(':', field('bit_width', $.integer_literal))),
+      // Field attributes are opaque metadata. Keep them in the concrete tree
+      // even when this grammar does not know their community-defined meaning.
+      repeat($.attribute),
+      optional(seq(
+        ':',
+        field('bit_width', $.integer_literal),
+        repeat($.attribute),
+      )),
     ),
 
     union_decl: $ => seq(
