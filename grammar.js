@@ -40,7 +40,8 @@ module.exports = grammar({
       $.foreign_global,
     ),
 
-    // import a.b.{x, y};  /  import a.b.*;  /  import a.b as c;  /  import a.b;
+    // import ./a; / import a.b.{x, y}; / import a.b.*; / import a.b as c;
+    // import a.b; The compiler also permits an empty selector list.
     import_decl: $ => seq(
       // Imports participate in target selection just like declarations.  Keep
       // arbitrary attributes in the concrete tree so editors do not report
@@ -48,6 +49,7 @@ module.exports = grammar({
       repeat($.attribute),
       optional('pub'),
       'import',
+      optional(seq('.', '/')),
       $.import_path,
       optional(choice(
         seq('.', $.glob_import),
@@ -58,7 +60,7 @@ module.exports = grammar({
     ),
     import_path: $ => seq($.identifier, repeat(seq('.', $.identifier))),
     glob_import: $ => '*',
-    multi_import: $ => seq('{', commaSep1($.identifier), '}'),
+    multi_import: $ => seq('{', commaSep($.identifier), '}'),
 
     // ── Attributes ────────────────────────────────────────────────────────────
 

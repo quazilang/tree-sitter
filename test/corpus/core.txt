@@ -81,6 +81,24 @@ pub import std.windows.*;
     (glob_import)))
 
 ==================
+relative and empty-selector imports
+==================
+
+import ./config;
+import settings.{};
+
+---
+
+(source_file
+  (import_decl
+    (import_path
+      (identifier)))
+  (import_decl
+    (import_path
+      (identifier))
+    (multi_import)))
+
+==================
 incomplete function body recovers
 ==================
 
