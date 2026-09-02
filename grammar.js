@@ -17,7 +17,8 @@ module.exports = grammar({
     [$.qualified_identifier],
     [$.named_type],
     [$.if_stmt, $.paren_expr],
-    [$.while_stmt, $.paren_expr],
+    [$.for_stmt, $._expr],
+    [$.named_arg, $.assign_expr],
     [$.fn_type],
   ],
 
@@ -237,8 +238,6 @@ module.exports = grammar({
       $.return_stmt,
       $.if_stmt,
       $.for_stmt,
-      $.while_stmt,
-      $.match_stmt,
       $.cfg_block,
       $.unsafe_block,
       $.break_stmt,
@@ -282,39 +281,41 @@ module.exports = grammar({
     for_stmt: $ => seq(
       'for',
       choice(
+        // Compiler-supported iteration: `for var item : values {}` and
+        // `for index, item : values {}`. `var` is optional in both forms.
         seq(
+          optional('var'),
           field('var', $.identifier),
           optional(seq(',', field('idx', $.identifier))),
           ':',
           field('iter', $._expr),
-          optional(seq('..', field('end', $._expr))),
         ),
+        // C-style loops match the compiler's initialized and empty-init forms.
+        seq(
+          optional('var'),
+          field('var', $.identifier),
+          '=',
+          field('init', $._expr),
+          ';',
+          optional(field('condition', $._expr)),
+          ';',
+          optional(field('update', $._expr)),
+        ),
+        seq(
+          ';',
+          optional(field('condition', $._expr)),
+          ';',
+          optional(field('update', $._expr)),
+        ),
+        blank(),
         field('condition', $._expr),
       ),
       field('body', $.block),
     ),
 
-    while_stmt: $ => seq(
-      'while',
-      field('condition', choice(
-        seq('(', $._expr, ')'),
-        $._expr,
-      )),
-      field('body', $.block),
-    ),
-
-    match_stmt: $ => seq(
-      'match',
-      field('value', $._expr),
-      '{',
-      commaSep($.match_arm),
-      optional(','),
-      '}',
-      optional(';'),
-    ),
-
     match_arm: $ => seq(
       field('pattern', $.match_pattern),
+      optional(seq('if', field('guard', $._expr))),
       '=>',
       field('body', $._expr),
     ),
@@ -467,7 +468,7 @@ module.exports = grammar({
       field('callee', $._expr),
       optional(seq('[', commaSep1($._type), ']')),
       '(',
-      commaSep($._expr),
+      commaSep($.call_arg),
       ')',
     )),
 
@@ -477,9 +478,16 @@ module.exports = grammar({
       field('method', $.identifier),
       optional(seq('[', commaSep1($._type), ']')),
       '(',
-      commaSep($._expr),
+      commaSep($.call_arg),
       ')',
     )),
+
+    call_arg: $ => choice($.named_arg, $._expr),
+    named_arg: $ => seq(
+      field('name', $.identifier),
+      '=',
+      field('value', $._expr),
+    ),
 
     field_expr: $ => prec.left(14, seq(
       field('object', $._expr),
@@ -555,7 +563,10 @@ module.exports = grammar({
     integer_literal: $ => /[0-9]+/,
     float_literal: $ => /[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?/,
     string_literal: $ => /"([^"\\]|\\[\s\S])*"/,
-    byte_string_literal: $ => /b"([^"\\]|\\.)*"/,
+    byte_string_literal: $ => choice(
+      /b"([^"\\]|\\.)*"/,
+      /br"[^"]*"/,
+    ),
     raw_string_literal: $ => /`[^`]*`/,
     bool_literal: $ => choice('true', 'false'),
   },

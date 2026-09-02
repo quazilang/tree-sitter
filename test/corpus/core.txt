@@ -189,3 +189,46 @@ struct User {
         (attr_arg
           (identifier)
           (integer_literal))))))
+
+==================
+for forms accepted by the compiler
+==================
+
+fn loops() void {
+    for var i : 0..3 { }
+    for index, value : items { }
+    for var step = 0; step < 3; step++ { }
+    for ; ready; tick() { }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (for_stmt
+        (identifier)
+        (range_expr
+          (integer_literal)
+          (integer_literal))
+        (block))
+      (for_stmt
+        (identifier)
+        (identifier)
+        (identifier)
+        (block))
+      (for_stmt
+        (identifier)
+        (integer_literal)
+        (binary_expr
+          (identifier)
+          (integer_literal))
+        (postfix_expr
+          (identifier))
+        (block))
+      (for_stmt
+        (identifier)
+        (call_expr
+          (identifier))
+        (block)))))
