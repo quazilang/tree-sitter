@@ -1,0 +1,474 @@
+==================
+match expression with guards and patterns
+==================
+
+fn classify(x: i32) str {
+    ret match x {
+        0 => "zero",
+        n if n > 0 => "positive",
+        _ => "negative",
+    };
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (block
+      (return_stmt
+        (match_expr
+          (identifier)
+          (match_arm
+            (match_pattern
+              (literal_pattern
+                (integer_literal)))
+            (string_literal))
+          (match_arm
+            (match_pattern
+              (variant_pattern
+                (identifier)))
+            (binary_expr
+              (identifier)
+              (integer_literal))
+            (string_literal))
+          (match_arm
+            (match_pattern
+              (wildcard_pattern))
+            (string_literal)))))))
+
+==================
+enum match with nested payload patterns
+==================
+
+fn handle(msg: Message) void {
+    match msg {
+        Message.Data(value) => io.println("{}", value),
+        Message.Closed => io.println("closed"),
+    };
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (block
+      (expr_stmt
+        (match_expr
+          (identifier)
+          (match_arm
+            (match_pattern
+              (variant_pattern
+                (identifier)
+                (identifier)
+                (match_pattern
+                  (variant_pattern
+                    (identifier)))))
+            (call_expr
+              (field_expr
+                (identifier)
+                (identifier))
+              (call_arg
+                (string_literal))
+              (call_arg
+                (identifier))))
+          (match_arm
+            (match_pattern
+              (variant_pattern
+                (identifier)
+                (identifier)))
+            (call_expr
+              (field_expr
+                (identifier)
+                (identifier))
+              (call_arg
+                (string_literal)))))))))
+
+==================
+closure expression
+==================
+
+fn main() i32 {
+    var double: fn(i32) i32 = |x| x * 2;
+    ret double(5);
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (var_stmt
+        (identifier)
+        (fn_type)
+        (closure_expr
+          (identifier)
+          (binary_expr
+            (identifier)
+            (integer_literal))))
+      (return_stmt
+        (call_expr
+          (identifier)
+          (call_arg
+            (integer_literal)))))))
+
+==================
+struct with impl and static method
+==================
+
+struct Rect { width: f64, height: f64, }
+
+impl Rect {
+    fn square(size: f64) Rect {
+        ret Rect { width: size, height: size };
+    }
+}
+
+---
+
+(source_file
+  (struct_decl
+    (identifier)
+    (struct_field
+      (identifier))
+    (struct_field
+      (identifier)))
+  (impl_decl
+    (named_type
+      (qualified_identifier
+        (identifier)))
+    (fn_decl
+      (identifier)
+      (param
+        (identifier))
+      (named_type
+        (qualified_identifier
+          (identifier)))
+      (block
+        (return_stmt
+          (struct_lit
+            (identifier)
+            (struct_lit_field
+              (identifier)
+              (identifier))
+            (struct_lit_field
+              (identifier)
+              (identifier))))))))
+
+==================
+trait impl for a type
+==================
+
+trait Area {
+    fn area(self: Rect) f64;
+}
+
+impl Area for Rect {
+    fn area(self: Rect) f64 {
+        ret self.width * self.height;
+    }
+}
+
+---
+
+(source_file
+  (trait_decl
+    (identifier)
+    (trait_method
+      (identifier)
+      (param
+        (identifier)
+        (named_type
+          (qualified_identifier
+            (identifier))))))
+  (impl_decl
+    (named_type
+      (qualified_identifier
+        (identifier)))
+    (named_type
+      (qualified_identifier
+        (identifier)))
+    (fn_decl
+      (identifier)
+      (param
+        (identifier)
+        (named_type
+          (qualified_identifier
+            (identifier))))
+      (block
+        (return_stmt
+          (binary_expr
+            (field_expr
+              (identifier)
+              (identifier))
+            (field_expr
+              (identifier)
+              (identifier))))))))
+
+==================
+try operator and result return
+==================
+
+fn parse_port(text: str) Result[u16, ParseError] {
+    const value = text.parse[u16]()?;
+    ret Ok(value);
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (named_type
+      (qualified_identifier
+        (identifier))
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (block
+      (const_stmt
+        (identifier)
+        (try_expr
+          (call_expr
+            (field_expr
+              (identifier)
+              (identifier)))))
+      (return_stmt
+        (call_expr
+          (identifier)
+          (call_arg
+            (identifier)))))))
+
+==================
+unsafe block with raw pointer
+==================
+
+fn read(ptr: *u8) u8 {
+    unsafe {
+        ret *ptr;
+    }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (ptr_type))
+    (block
+      (unsafe_block
+        (block
+          (return_stmt
+            (unary_expr
+              (identifier))))))))
+
+==================
+type alias and repr(C)
+==================
+
+@repr(C) type Callback = fn(i32, i32) i32;
+
+type Rune = u32;
+
+---
+
+(source_file
+  (type_alias
+    (attribute
+      (identifier)
+      (attr_arg
+        (identifier)))
+    (identifier)
+    (fn_type))
+  (type_alias
+    (identifier)))
+
+==================
+generic enum with multiple variants
+==================
+
+pub enum Result[T, E] {
+    Ok(T),
+    Err(E),
+}
+
+---
+
+(source_file
+  (enum_decl
+    (identifier)
+    (generic_params
+      (identifier)
+      (identifier))
+    (enum_variant
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (enum_variant
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))))
+
+==================
+cfg conditional block
+==================
+
+@cfg(target_os="linux")
+fn separator() str { ret "/"; }
+
+---
+
+(source_file
+  (fn_decl
+    (attribute
+      (identifier)
+      (attr_arg
+        (identifier)
+        (string_literal)))
+    (identifier)
+    (block
+      (return_stmt
+        (string_literal)))))
+
+==================
+slice expression with step
+==================
+
+fn main() i32 {
+    const rev = text[::-1];
+    const mid = text[1:5];
+    ret 0;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (const_stmt
+        (identifier)
+        (slice_expr
+          (identifier)
+          (unary_expr
+            (integer_literal))))
+      (const_stmt
+        (identifier)
+        (slice_expr
+          (identifier)
+          (integer_literal)
+          (integer_literal)))
+      (return_stmt
+        (integer_literal)))))
+
+==================
+derive attribute on struct
+==================
+
+@derive(Serialize)
+struct Config {
+    name: String,
+    count: i64,
+    enabled: bool,
+}
+
+---
+
+(source_file
+  (struct_decl
+    (attribute
+      (identifier)
+      (attr_arg
+        (identifier)))
+    (identifier)
+    (struct_field
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (struct_field
+      (identifier))
+    (struct_field
+      (identifier))))
+
+==================
+named arguments in function call
+==================
+
+fn main() i32 {
+    greet(punctuation="!", name="Quazi");
+    ret 0;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (expr_stmt
+        (call_expr
+          (identifier)
+          (call_arg
+            (named_arg
+              (identifier)
+              (string_literal)))
+          (call_arg
+            (named_arg
+              (identifier)
+              (string_literal)))))
+      (return_stmt
+        (integer_literal)))))
+
+==================
+incomplete match expression recovers
+==================
+
+fn f(x: i32) i32 {
+    match x {
+        0 =>
+
+---
+
+(source_file
+  (ERROR
+    (identifier)
+    (param
+      (identifier))
+    (identifier)
+    (match_pattern
+      (literal_pattern
+        (integer_literal)))))
+
+==================
+missing closing brace recovers
+==================
+
+fn broken() void {
+    var x = 42;
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (var_stmt
+        (identifier)
+        (integer_literal))
+      (MISSING "}"))))
