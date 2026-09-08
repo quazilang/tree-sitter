@@ -38,10 +38,11 @@ fn main() i32 {
           (field_expr
             (identifier)
             (identifier))
-          (array_lit
-            (integer_literal)
-            (integer_literal)
-            (integer_literal))))
+          (call_arg
+            (array_lit
+              (integer_literal)
+              (integer_literal)
+              (integer_literal)))))
       (const_stmt
         (identifier)
         (index_expr
@@ -52,12 +53,82 @@ fn main() i32 {
           (field_expr
             (identifier)
             (identifier))
-          (string_literal)
-          (index_expr
-            (identifier)
-            (integer_literal))))
+          (call_arg
+            (string_literal))
+          (call_arg
+            (index_expr
+              (identifier)
+              (integer_literal)))))
       (return_stmt
         (integer_literal)))))
+
+==================
+multi-index expressions accepted by the compiler
+==================
+
+fn set(values: Matrix) void {
+    values[0, 1] = 4;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (block
+      (expr_stmt
+        (assign_expr
+          (index_expr
+            (identifier)
+            (integer_literal)
+            (integer_literal))
+          (integer_literal))))))
+
+==================
+semicolon-separated aggregate items accepted by the compiler
+==================
+
+struct Pair {
+    left: i32;
+    right: i32;
+}
+
+union Scalar {
+    integer: i32;
+    decimal: f64;
+}
+
+enum Mode {
+    Read;
+    Write;
+}
+
+---
+
+(source_file
+  (struct_decl
+    (identifier)
+    (struct_field
+      (identifier))
+    (struct_field
+      (identifier)))
+  (union_decl
+    (identifier)
+    (struct_field
+      (identifier))
+    (struct_field
+      (identifier)))
+  (enum_decl
+    (identifier)
+    (enum_variant
+      (identifier))
+    (enum_variant
+      (identifier))))
 
 ==================
 conditional public import

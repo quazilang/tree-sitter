@@ -1,12 +1,12 @@
 ; Keywords
 [
   "fn" "struct" "union" "trait" "enum" "impl" "type" "import"
-  "for" "while" "if" "else" "match" "ret"
+  "for" "if" "else" "match" "ret"
   "const" "var" "pub" "unsafe" "as" "dyn" "for"
 ] @keyword
 
 ; Control flow keywords get a more specific scope
-["ret" "if" "else" "for" "while" "match" "break" "continue"] @keyword.control
+["ret" "if" "else" "for" "match" "break" "continue"] @keyword.control
 
 ; Primitive types
 [

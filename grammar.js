@@ -9,8 +9,6 @@ module.exports = grammar({
   word: $ => $.identifier,
 
   conflicts: $ => [
-    [$._expr, $.named_type],
-    [$.match_stmt, $.match_expr],
     [$._expr, $.struct_lit],
     [$._expr, $.qualified_identifier],
     [$.import_path],
@@ -18,7 +16,7 @@ module.exports = grammar({
     [$.named_type],
     [$.if_stmt, $.paren_expr],
     [$.for_stmt, $._expr],
-    [$.named_arg, $.assign_expr],
+    [$._expr, $.named_arg],
     [$.fn_type],
   ],
 
@@ -121,8 +119,7 @@ module.exports = grammar({
       field('name', $.identifier),
       optional($.generic_params),
       '{',
-      commaSep($.struct_field),
-      optional(','),
+      itemSep($.struct_field),
       '}',
     ),
 
@@ -148,8 +145,7 @@ module.exports = grammar({
       field('name', $.identifier),
       optional($.generic_params),
       '{',
-      commaSep($.struct_field),
-      optional(','),
+      itemSep($.struct_field),
       '}',
     ),
 
@@ -186,8 +182,7 @@ module.exports = grammar({
       field('name', $.identifier),
       optional($.generic_params),
       '{',
-      commaSep($.enum_variant),
-      optional(','),
+      itemSep($.enum_variant),
       '}',
     ),
 
@@ -498,7 +493,7 @@ module.exports = grammar({
     index_expr: $ => prec.left(14, seq(
       field('object', $._expr),
       '[',
-      field('index', $._expr),
+      field('index', commaSep1($._expr)),
       ']',
     )),
 
@@ -580,4 +575,11 @@ function commaSep(rule) {
 
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+// The compiler permits either delimiter between aggregate fields and enum
+// variants. Keep this distinct from expression lists, where only commas are
+// valid, so editors recover the same declaration syntax as the compiler.
+function itemSep(rule) {
+  return optional(seq(rule, repeat(seq(choice(',', ';'), rule)), optional(choice(',', ';'))));
 }

@@ -7,7 +7,8 @@
     "main": "bindings/node",
     "scripts": {
         "build": "tree-sitter generate && node-gyp build",
-        "test": "tree-sitter test"
+        "test": "tree-sitter test",
+        "test:workspace-conformance": "node scripts/check-workspace-conformance.js"
     },
     "dependencies": {
         "nan": "*"
