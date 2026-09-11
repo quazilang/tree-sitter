@@ -9,6 +9,7 @@ const { spawnSync } = require("child_process");
 
 const grammarRoot = path.resolve(__dirname, "..");
 const workspaceRoot = path.resolve(grammarRoot, "..");
+const configPath = path.join(__dirname, "tree-sitter.config.json");
 const repositories = ["quazistrap", "std"];
 
 function trackedQuaziSources(repository) {
@@ -45,12 +46,17 @@ const result = spawnSync(
   [
     treeSitterCli,
     "parse",
+    "--config-path",
+    configPath,
     "--grammar-path",
     grammarRoot,
     "--json-summary",
     ...sources,
   ],
-  { encoding: "utf8" },
+  {
+    cwd: grammarRoot,
+    encoding: "utf8",
+  },
 );
 
 if (result.error) {

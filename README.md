@@ -22,7 +22,9 @@ npm run test:workspace-conformance
 ```
 
 This is deliberately separate from `npm test`, so a standalone grammar clone
-does not need the compiler and standard-library sibling repositories.
+does not need the compiler and standard-library sibling repositories. The
+workspace check supplies its own Tree-sitter CLI configuration, so it does not
+depend on parser directories configured in a developer's home directory.
 
 The grammar preserves opaque postfix attributes on struct and union fields,
 such as `name: String @ini("username")`. It recognizes the syntax and
