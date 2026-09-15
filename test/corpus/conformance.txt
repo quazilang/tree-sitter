@@ -75,3 +75,23 @@ fn loop_with_call_init() void {
         (postfix_expr
           (identifier))
         (block)))))
+==================
+exclusive reference type &Type! in function parameters
+==================
+
+fn mutate(self: &IniDocument!, value: str) void { }
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (ref_type
+        (named_type
+          (qualified_identifier
+            (identifier)))))
+    (param
+      (identifier))
+    (block)))

@@ -2502,6 +2502,22 @@
         {
           "type": "SYMBOL",
           "name": "_type"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "exclusive",
+              "content": {
+                "type": "STRING",
+                "value": "!"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -4273,6 +4289,9 @@
     ],
     [
       "fn_type"
+    ],
+    [
+      "ref_type"
     ]
   ],
   "precedences": [],

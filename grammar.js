@@ -37,6 +37,7 @@ module.exports = grammar({
     [$.for_stmt, $._expr],
     [$._expr, $.named_arg],
     [$.fn_type],
+    [$.ref_type],
   ],
 
   rules: {
@@ -411,7 +412,9 @@ module.exports = grammar({
     ),
 
     qualified_identifier: $ => seq($.identifier, repeat(seq('.', $.identifier))),
-    ref_type: $ => seq('&', $._type),
+    // `&Type` is a shared reference; `&Type!` is an exclusive (mutable)
+    // reference. Both are parsed by the compiler in parse_type (mod.rs:1833-1850).
+    ref_type: $ => seq('&', $._type, optional(field('exclusive', '!'))),
     ptr_type: $ => choice(seq('*', $._type), seq('**', $._type)),
     array_type: $ => seq('[', $._type, ';', $.integer_literal, ']'),
     flexible_array_type: $ => seq('[', $._type, ';', '..', ']'),
