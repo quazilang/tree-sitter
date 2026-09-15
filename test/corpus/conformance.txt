@@ -1,0 +1,77 @@
+==================
+bitwise OR binds tighter than equality - a == b | c parses as a == (b | c)
+==================
+
+fn precedence_check(a: i32, b: i32, c: i32) bool {
+    ret a == b | c;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (block
+      (return_stmt
+        (binary_expr
+          (identifier)
+          (binary_expr
+            (identifier)
+            (identifier)))))))
+
+==================
+bitwise AND binds tighter than comparison - a < b & c parses as a < (b & c)
+==================
+
+fn precedence_check2(a: i32, b: i32, c: i32) bool {
+    ret a < b & c;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (block
+      (return_stmt
+        (binary_expr
+          (identifier)
+          (binary_expr
+            (identifier)
+            (identifier)))))))
+
+==================
+C-style for with arbitrary expression initializer
+==================
+
+fn loop_with_call_init() void {
+    for setup(); step < 10; step++ { }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (for_stmt
+        (call_expr
+          (identifier))
+        (binary_expr
+          (identifier)
+          (integer_literal))
+        (postfix_expr
+          (identifier))
+        (block)))))

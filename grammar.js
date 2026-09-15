@@ -6,7 +6,26 @@ module.exports = grammar({
 
   extras: $ => [/\s+/, $.comment],
 
+  // `word` is the grammar's identifier-like production. Tree-sitter uses this
+  // to implement keyword extraction: any literal keyword that matches the word
+  // rule's pattern (e.g. `while`, `platform`) is automatically excluded from
+  // the identifier rule, preventing them from being parsed as valid user names.
   word: $ => $.identifier,
+
+  // Reserved keywords that do not appear in any other grammar rule but must
+  // NOT be parsed as identifiers. Tree-sitter's keyword-extraction mechanism
+  // (triggered by the `word` property above) automatically prevents any string
+  // literal that appears anywhere in the grammar from matching the word rule's
+  // pattern.  We introduce named underscore rules so these literals are
+  // reachable from the grammar object and the extraction fires correctly.
+  //
+  // _kw_while   — `while` is a reserved keyword in the Quazi compiler (lexer
+  //               emits TokenKind::While) but has no grammar production yet.
+  // _kw_platform — `platform` is similarly reserved (TokenKind::Platform).
+  //
+  // These rules are intentionally unreachable from _item / _stmt / _expr so
+  // they never appear in a real parse tree; they exist only to register the
+  // literals with the Tree-sitter keyword extractor.
 
   conflicts: $ => [
     [$._expr, $.struct_lit],
@@ -24,6 +43,12 @@ module.exports = grammar({
     source_file: $ => repeat($._item),
 
     comment: $ => token(seq('//', /.*/)),
+
+    // These rules exist solely to register `while` and `platform` as keywords
+    // with Tree-sitter's keyword-extraction mechanism (see the `word` comment
+    // above).  They are not reachable from any item/stmt/expression rule.
+    _kw_while: $ => 'while',
+    _kw_platform: $ => 'platform',
 
     // ── Top-level items ───────────────────────────────────────────────────────
 
@@ -285,7 +310,7 @@ module.exports = grammar({
           ':',
           field('iter', $._expr),
         ),
-        // C-style loops match the compiler's initialized and empty-init forms.
+        // C-style: `for var i = 0; cond; update {}` — var-decl initializer.
         seq(
           optional('var'),
           field('var', $.identifier),
@@ -296,6 +321,17 @@ module.exports = grammar({
           ';',
           optional(field('update', $._expr)),
         ),
+        // C-style: `for expr; cond; update {}` — arbitrary-expression initializer.
+        // The compiler parses any expression as the initializer when no `var`
+        // keyword is present and the init is followed by `;` (mod.rs:649-678).
+        seq(
+          field('init_expr', $._expr),
+          ';',
+          optional(field('condition', $._expr)),
+          ';',
+          optional(field('update', $._expr)),
+        ),
+        // C-style: `for ; cond; update {}` — empty initializer.
         seq(
           ';',
           optional(field('condition', $._expr)),
@@ -427,14 +463,24 @@ module.exports = grammar({
     )),
 
     binary_expr: $ => {
+      // Precedence levels are derived from the compiler's recursive-descent
+      // call chain in quazistrap/src/parser/mod.rs (higher number = tighter):
+      //   parse_logical_or  → parse_logical_and  → parse_equality
+      //   → parse_comparison → parse_bitwise_or  → parse_bitwise_xor
+      //   → parse_bitwise_and → parse_shift      → parse_term
+      //   → parse_factor
+      //
+      // In the compiler, bitwise operators bind *tighter* than equality and
+      // comparison: `a == b | c` parses as `a == (b | c)`, and `a < b & c`
+      // parses as `a < (b & c)`. The table below matches this ordering.
       const table = [
         [prec.left, 2,  '||'],
         [prec.left, 3,  '&&'],
-        [prec.left, 4,  '|'],
-        [prec.left, 5,  '^'],
-        [prec.left, 6,  '&'],
-        [prec.left, 7,  choice('==', '!=')],
-        [prec.left, 8,  choice('<', '<=', '>', '>=')],
+        [prec.left, 4,  choice('==', '!=')],     // equality  (was 7)
+        [prec.left, 5,  choice('<', '<=', '>', '>=')], // comparison (was 8)
+        [prec.left, 6,  '|'],                     // bitwise OR  (was 4)
+        [prec.left, 7,  '^'],                     // bitwise XOR (was 5)
+        [prec.left, 8,  '&'],                     // bitwise AND (was 6)
         [prec.left, 9,  choice('<<', '>>')],
         [prec.left, 10, choice('+', '-')],
         [prec.left, 11, choice('*', '/', '%')],
