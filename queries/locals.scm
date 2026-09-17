@@ -5,6 +5,8 @@
 ; Definitions
 (fn_decl    name: (identifier) @local.definition)
 (param      name: (identifier) @local.definition)
+(variadic_param name: (identifier) @local.definition)
+(trait_param name: (identifier) @local.definition)
 (var_stmt   name: (identifier) @local.definition)
 (const_stmt name: (identifier) @local.definition)
 

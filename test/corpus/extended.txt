@@ -185,7 +185,7 @@ impl Area for Rect {
     (identifier)
     (trait_method
       (identifier)
-      (param
+      (trait_param
         (identifier)
         (named_type
           (qualified_identifier

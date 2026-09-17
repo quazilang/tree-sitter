@@ -198,7 +198,7 @@ pub trait ReadableConfig {
     (identifier)
     (trait_method
       (identifier)
-      (param
+      (trait_param
         (identifier)))))
 
 ==================

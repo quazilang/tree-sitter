@@ -106,13 +106,15 @@ module.exports = grammar({
 
     fn_decl: $ => seq(
       repeat($.attribute),
-      optional('pub'),
-      optional('unsafe'),
+      optional(choice(
+        seq('pub', optional('unsafe')),
+        seq('unsafe', optional('pub')),
+      )),
       'fn',
       field('name', $.identifier),
       optional($.generic_params),
       '(',
-      commaSep($.param),
+      optional($._function_params),
       ')',
       optional(field('return_type', $._type)),
       choice($.block, ';'),
@@ -120,21 +122,37 @@ module.exports = grammar({
 
     generic_params: $ => seq('[', commaSep1($.identifier), ']'),
 
-    param: $ => choice(
+    // The compiler accepts a Quazi variadic parameter (`...rest: T`) or a
+    // bare C variadic marker (`...`) only in the final position. Keep that
+    // syntactic constraint here: accepting `fn f(..., x: T)` makes editors
+    // treat a compiler parser error as a valid declaration.
+    _function_params: $ => choice(
+      commaSep1($.param),
       seq(
-        repeat($.attribute),
-        field('name', $.identifier),
-        ':',
-        field('type', $._type),
+        commaSep1($.param),
+        ',',
+        choice($.variadic_param, $._c_variadic_param),
       ),
-      '...',
-      seq(
-        '...',
-        field('name', $.identifier),
-        ':',
-        field('type', $._type),
-      ),
+      $.variadic_param,
+      $._c_variadic_param,
     ),
+
+    param: $ => seq(
+      repeat($.attribute),
+      field('name', $.identifier),
+      ':',
+      field('type', $._type),
+    ),
+
+    variadic_param: $ => seq(
+      repeat($.attribute),
+      '...',
+      field('name', $.identifier),
+      ':',
+      field('type', $._type),
+    ),
+
+    _c_variadic_param: $ => '...',
 
     // ── Struct ────────────────────────────────────────────────────────────────
 
@@ -193,10 +211,19 @@ module.exports = grammar({
       field('name', $.identifier),
       optional($.generic_params),
       '(',
-      commaSep($.param),
+      commaSep($.trait_param),
       ')',
       optional(field('return_type', $._type)),
       ';',
+    ),
+
+    // Trait declarations only accept named, attribute-free parameters. The
+    // compiler deliberately keeps parameter attributes on function bodies,
+    // not trait signatures.
+    trait_param: $ => seq(
+      field('name', $.identifier),
+      ':',
+      field('type', $._type),
     ),
 
     // ── Enum ──────────────────────────────────────────────────────────────────
@@ -372,7 +399,8 @@ module.exports = grammar({
     ),
 
     cfg_block: $ => seq(
-      '@cfg',
+      '@',
+      'cfg',
       '(',
       $.attr_arg,
       ')',
@@ -477,17 +505,17 @@ module.exports = grammar({
       // comparison: `a == b | c` parses as `a == (b | c)`, and `a < b & c`
       // parses as `a < (b & c)`. The table below matches this ordering.
       const table = [
-        [prec.left, 2,  '||'],
-        [prec.left, 3,  '&&'],
-        [prec.left, 4,  choice('==', '!=')],     // equality  (was 7)
-        [prec.left, 5,  choice('<', '<=', '>', '>=')], // comparison (was 8)
-        [prec.left, 6,  '|'],                     // bitwise OR  (was 4)
-        [prec.left, 7,  '^'],                     // bitwise XOR (was 5)
-        [prec.left, 8,  '&'],                     // bitwise AND (was 6)
-        [prec.left, 9,  choice('<<', '>>')],
-        [prec.left, 10, choice('+', '-')],
-        [prec.left, 11, choice('*', '/', '%')],
-        [prec.right, 12, '**'],
+        [prec.left, 3,  '||'],
+        [prec.left, 4,  '&&'],
+        [prec.left, 5,  choice('==', '!=')],     // equality
+        [prec.left, 6,  choice('<', '<=', '>', '>=')], // comparison
+        [prec.left, 7,  '|'],
+        [prec.left, 8,  '^'],
+        [prec.left, 9,  '&'],
+        [prec.left, 10, choice('<<', '>>')],
+        [prec.left, 11, choice('+', '-')],
+        [prec.left, 12, choice('*', '/', '%')],
+        [prec.right, 13, '**'],
       ];
       return choice(...table.map(([assoc, prec_n, op]) =>
         assoc(prec_n, seq(
@@ -498,17 +526,17 @@ module.exports = grammar({
       ));
     },
 
-    unary_expr: $ => prec(13, seq(
-      field('op', choice('-', '!', '~', '++', '--', '&', '*')),
+    unary_expr: $ => prec(14, seq(
+      field('op', choice('-', '!', '++', '--', '&', '*')),
       field('operand', $._expr),
     )),
 
-    postfix_expr: $ => prec.left(14, seq(
+    postfix_expr: $ => prec.left(15, seq(
       field('operand', $._expr),
       field('op', choice('++', '--')),
     )),
 
-    call_expr: $ => prec.left(14, seq(
+    call_expr: $ => prec.left(15, seq(
       field('callee', $._expr),
       optional(seq('[', commaSep1($._type), ']')),
       '(',
@@ -516,7 +544,7 @@ module.exports = grammar({
       ')',
     )),
 
-    method_call_expr: $ => prec.left(14, seq(
+    method_call_expr: $ => prec.left(15, seq(
       field('receiver', $._expr),
       '.',
       field('method', $.identifier),
@@ -533,20 +561,20 @@ module.exports = grammar({
       field('value', $._expr),
     ),
 
-    field_expr: $ => prec.left(14, seq(
+    field_expr: $ => prec.left(15, seq(
       field('object', $._expr),
       '.',
       field('field', $.identifier),
     )),
 
-    index_expr: $ => prec.left(14, seq(
+    index_expr: $ => prec.left(15, seq(
       field('object', $._expr),
       '[',
       field('index', commaSep1($._expr)),
       ']',
     )),
 
-    slice_expr: $ => prec.left(14, seq(
+    slice_expr: $ => prec.left(15, seq(
       field('object', $._expr),
       '[',
       optional(field('start', $._expr)),
@@ -556,13 +584,13 @@ module.exports = grammar({
       ']',
     )),
 
-    cast_expr: $ => prec.left(14, seq(
+    cast_expr: $ => prec.left(15, seq(
       field('value', $._expr),
       'as',
       field('type', $._type),
     )),
 
-    try_expr: $ => prec.left(14, seq(
+    try_expr: $ => prec.left(15, seq(
       field('value', $._expr),
       '?',
     )),
@@ -576,7 +604,8 @@ module.exports = grammar({
       '}',
     ),
 
-    array_lit: $ => seq('[', commaSep($._expr), ']'),
+    // Parser::parse_primary accepts a trailing comma in an array literal.
+    array_lit: $ => seq('[', commaSepTrailing($._expr), ']'),
 
     struct_lit: $ => seq(
       field('type', $.identifier),
@@ -593,7 +622,9 @@ module.exports = grammar({
 
     closure_expr: $ => seq('|', commaSep($.identifier), '|', field('body', $._expr)),
 
-    range_expr: $ => prec.left(9, seq(
+    // Ranges sit immediately above assignment and below logical-or in the
+    // compiler (`parse_assignment -> parse_range -> parse_logical_or`).
+    range_expr: $ => prec.left(2, seq(
       field('start', $._expr),
       choice('..', '..='),
       field('end', $._expr),
@@ -605,7 +636,9 @@ module.exports = grammar({
 
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     integer_literal: $ => /[0-9]+/,
-    float_literal: $ => /[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?/,
+    // The compiler lexer recognizes decimal floats only; it does not yet
+    // implement exponent notation.
+    float_literal: $ => /[0-9]+\.[0-9]+/,
     string_literal: $ => /"([^"\\]|\\[\s\S])*"/,
     byte_string_literal: $ => choice(
       /b"([^"\\]|\\.)*"/,
@@ -624,6 +657,10 @@ function commaSep(rule) {
 
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+function commaSepTrailing(rule) {
+  return seq(commaSep(rule), optional(','));
 }
 
 // The compiler permits either delimiter between aggregate fields and enum

@@ -95,3 +95,63 @@ fn mutate(self: &IniDocument!, value: str) void { }
     (param
       (identifier))
     (block)))
+
+==================
+compiler parser edge syntax
+==================
+
+@api fn native(format: str, ...) void;
+fn collect(...values: i32) void {}
+fn pointer() **u8;
+fn range(a: bool, b: i32, c: i32) void {
+    var values = [1,];
+    var selected = a || b .. c;
+}
+impl S {
+    unsafe pub fn method() void {}
+}
+
+---
+
+(source_file
+  (fn_decl
+    (attribute
+      (identifier))
+    (identifier)
+    (param
+      (identifier)))
+  (fn_decl
+    (identifier)
+    (variadic_param
+      (identifier))
+    (block))
+  (fn_decl
+    (identifier)
+    (ptr_type))
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (block
+      (var_stmt
+        (identifier)
+        (array_lit
+          (integer_literal)))
+      (var_stmt
+        (identifier)
+        (range_expr
+          (binary_expr
+            (identifier)
+            (identifier))
+          (identifier)))))
+  (impl_decl
+    (named_type
+      (qualified_identifier
+        (identifier)))
+    (fn_decl
+      (identifier)
+      (block))))

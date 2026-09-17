@@ -36,6 +36,8 @@
 
 ; Parameters
 (param name: (identifier) @variable.parameter)
+(variadic_param name: (identifier) @variable.parameter)
+(trait_param name: (identifier) @variable.parameter)
 
 ; Struct fields
 (struct_field name: (identifier) @property)
@@ -61,12 +63,12 @@
 
 ; Operators
 [
-  "+" "-" "*" "/" "%" "**" "&" "|" "^" "~" "<<" ">>"
+  "+" "-" "*" "/" "%" "**" "&" "|" "^" "<<" ">>"
   "=" "==" "!=" "<" "<=" ">" ">="
   "+=" "-=" "*=" "/=" "%="
   "++" "--"
-  "&&" "||" "!"
-  "=>" ".."
+  "&&" "||" "!" "?"
+  "=>" ".." "..="
 ] @operator
 
 ; Punctuation
