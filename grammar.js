@@ -33,7 +33,10 @@ module.exports = grammar({
     [$.import_path],
     [$.qualified_identifier],
     [$.named_type],
-    [$.if_stmt, $.paren_expr],
+    [$.if_stmt, $.if_expr],
+    [$.unary_expr, $.exclusive_ref_expr],
+    [$.if_expr, $.paren_expr],
+    [$.if_stmt, $.if_expr, $.paren_expr],
     [$.for_stmt, $._expr],
     [$._expr, $.named_arg],
     [$.fn_type],
@@ -278,7 +281,9 @@ module.exports = grammar({
 
     // ── Statements ────────────────────────────────────────────────────────────
 
-    block: $ => seq('{', repeat($._stmt), '}'),
+    // The compiler accepts a block's final expression without `;` only as a
+    // function-body tail (D-017); the grammar is deliberately permissive.
+    block: $ => seq('{', repeat($._stmt), optional(field('tail', $._expr)), '}'),
 
     _stmt: $ => choice(
       $.var_stmt,
@@ -316,7 +321,7 @@ module.exports = grammar({
     break_stmt: $ => seq('break', ';'),
     continue_stmt: $ => seq('continue', ';'),
 
-    if_stmt: $ => seq(
+    if_stmt: $ => prec.dynamic(1, seq(
       'if',
       field('condition', choice(
         seq('(', $._expr, ')'),
@@ -324,7 +329,20 @@ module.exports = grammar({
       )),
       field('then', $.block),
       optional(seq('else', choice($.block, $.if_stmt))),
-    ),
+    )),
+
+    // Value-producing `if` (D-017): `else` is mandatory and each branch holds
+    // one expression. Statement position prefers `if_stmt`.
+    if_expr: $ => prec.right(seq(
+      'if',
+      field('condition', choice(
+        seq('(', $._expr, ')'),
+        $._expr,
+      )),
+      field('then', $.block),
+      'else',
+      field('else', choice($.block, $.if_expr)),
+    )),
 
     for_stmt: $ => seq(
       'for',
@@ -458,6 +476,7 @@ module.exports = grammar({
       $.compound_assign_expr,
       $.binary_expr,
       $.unary_expr,
+      $.exclusive_ref_expr,
       $.postfix_expr,
       $.cast_expr,
       $.try_expr,
@@ -467,6 +486,7 @@ module.exports = grammar({
       $.index_expr,
       $.slice_expr,
       $.match_expr,
+      $.if_expr,
       $.array_lit,
       $.struct_lit,
       $.closure_expr,
@@ -530,6 +550,9 @@ module.exports = grammar({
       field('op', choice('-', '!', '++', '--', '&', '*')),
       field('operand', $._expr),
     )),
+
+    // `&value!` is an exclusive borrow; `!` is not otherwise postfix.
+    exclusive_ref_expr: $ => prec(14, seq('&', field('operand', $._expr), '!')),
 
     postfix_expr: $ => prec.left(15, seq(
       field('operand', $._expr),

@@ -155,3 +155,30 @@ impl S {
     (fn_decl
       (identifier)
       (block))))
+
+==================
+exclusive borrow expression &value!
+==================
+
+fn touch(counter: i32) void {
+    if (true) { mutate(&counter!); }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (block
+      (if_stmt
+        (paren_expr
+          (bool_literal))
+        (block
+          (expr_stmt
+            (call_expr
+              (identifier)
+              (call_arg
+                (exclusive_ref_expr
+                  (identifier))))))))))

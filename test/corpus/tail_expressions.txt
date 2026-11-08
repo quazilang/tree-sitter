@@ -1,0 +1,90 @@
+==================
+function tail value without semicolon (D-017)
+==================
+
+fn add(a: i32, b: i32) i32 {
+    a + b
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (block
+      (binary_expr
+        (identifier)
+        (identifier)))))
+
+==================
+tail if statement with value branches (D-017)
+==================
+
+fn max(a: i32, b: i32) i32 {
+    if (a > b) {
+        a
+    } else {
+        b
+    }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (param
+      (identifier))
+    (block
+      (if_stmt
+        (paren_expr
+          (binary_expr
+            (identifier)
+            (identifier)))
+        (block
+          (identifier))
+        (block
+          (identifier))))))
+
+==================
+if expression with else-if chain in a binding (D-017)
+==================
+
+fn abs(x: i32) i32 {
+    const result: i32 = if (x < 0) { -x } else if (x == 0) { 0 } else { x };
+    result
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier))
+    (block
+      (const_stmt
+        (identifier)
+        (if_expr
+          (paren_expr
+            (binary_expr
+              (identifier)
+              (integer_literal)))
+          (block
+            (unary_expr
+              (identifier)))
+          (if_expr
+            (binary_expr
+              (identifier)
+              (integer_literal))
+            (block
+              (integer_literal))
+            (block
+              (identifier)))))
+      (identifier))))
