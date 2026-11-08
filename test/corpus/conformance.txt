@@ -182,3 +182,33 @@ fn touch(counter: i32) void {
               (call_arg
                 (exclusive_ref_expr
                   (identifier))))))))))
+
+==================
+hexadecimal and exponent numeric literals
+==================
+
+fn numbers() void {
+    const mask: u32 = 0xFF;
+    const avogadro: f64 = 6.022e23;
+    const small: f64 = 1.5e-10;
+    const whole: f64 = 2E+3;
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (const_stmt
+        (identifier)
+        (integer_literal))
+      (const_stmt
+        (identifier)
+        (float_literal))
+      (const_stmt
+        (identifier)
+        (float_literal))
+      (const_stmt
+        (identifier)
+        (float_literal)))))

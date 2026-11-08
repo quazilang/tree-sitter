@@ -658,10 +658,13 @@ module.exports = grammar({
     // ── Terminals ─────────────────────────────────────────────────────────────
 
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-    integer_literal: $ => /[0-9]+/,
-    // The compiler lexer recognizes decimal floats only; it does not yet
-    // implement exponent notation.
-    float_literal: $ => /[0-9]+\.[0-9]+/,
+    // Decimal or `0x` hexadecimal integers, matching the compiler lexer.
+    integer_literal: $ => token(choice(/0[xX][0-9a-fA-F]+/, /[0-9]+/)),
+    // A fraction, an exponent, or both: 3.14, 6.022e23, 1.5e-10, 2E+3.
+    float_literal: $ => token(choice(
+      /[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?/,
+      /[0-9]+[eE][+-]?[0-9]+/,
+    )),
     string_literal: $ => /"([^"\\]|\\[\s\S])*"/,
     byte_string_literal: $ => choice(
       /b"([^"\\]|\\.)*"/,
