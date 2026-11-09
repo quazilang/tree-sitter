@@ -88,6 +88,10 @@
           "named": true
         },
         {
+          "type": "qo_expr",
+          "named": true
+        },
+        {
           "type": "range_expr",
           "named": true
         },
@@ -258,6 +262,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -369,6 +377,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -538,6 +550,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -737,6 +753,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -854,6 +874,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -1042,6 +1066,10 @@
           "named": true
         },
         {
+          "type": "qo_expr",
+          "named": true
+        },
+        {
           "type": "range_expr",
           "named": true
         },
@@ -1158,6 +1186,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -1441,6 +1473,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -1580,6 +1616,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -1707,6 +1747,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -1847,6 +1891,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -2094,6 +2142,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -2336,6 +2388,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -2453,6 +2509,10 @@
         },
         {
           "type": "postfix_expr",
+          "named": true
+        },
+        {
+          "type": "qo_expr",
           "named": true
         },
         {
@@ -2582,6 +2642,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -2965,6 +3029,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -3089,6 +3157,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -3200,6 +3272,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -3317,6 +3393,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -3428,6 +3508,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -3729,6 +3813,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -3878,6 +3966,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -4319,6 +4411,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -4430,6 +4526,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -4580,6 +4680,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -4691,6 +4795,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -4821,6 +4929,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -4984,6 +5096,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -5175,6 +5291,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -5494,6 +5614,10 @@
           "named": true
         },
         {
+          "type": "qo_expr",
+          "named": true
+        },
+        {
           "type": "range_expr",
           "named": true
         },
@@ -5627,6 +5751,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -5703,6 +5831,22 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "qo_expr",
+    "named": true,
+    "fields": {
+      "call": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "call_expr",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -5806,6 +5950,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -5920,6 +6068,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -6101,6 +6253,10 @@
           "named": true
         },
         {
+          "type": "qo_expr",
+          "named": true
+        },
+        {
           "type": "range_expr",
           "named": true
         },
@@ -6220,6 +6376,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -6331,6 +6491,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -6448,6 +6612,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -6559,6 +6727,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -6997,6 +7169,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -7425,6 +7601,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -7719,6 +7899,10 @@
             "named": true
           },
           {
+            "type": "qo_expr",
+            "named": true
+          },
+          {
             "type": "range_expr",
             "named": true
           },
@@ -8009,6 +8193,10 @@
           },
           {
             "type": "postfix_expr",
+            "named": true
+          },
+          {
+            "type": "qo_expr",
             "named": true
           },
           {
@@ -8512,6 +8700,10 @@
   },
   {
     "type": "pub",
+    "named": false
+  },
+  {
+    "type": "qo",
     "named": false
   },
   {

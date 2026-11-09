@@ -476,6 +476,7 @@ module.exports = grammar({
       $.compound_assign_expr,
       $.binary_expr,
       $.unary_expr,
+      $.qo_expr,
       $.exclusive_ref_expr,
       $.postfix_expr,
       $.cast_expr,
@@ -550,6 +551,9 @@ module.exports = grammar({
       field('op', choice('-', '!', '++', '--', '&', '*')),
       field('operand', $._expr),
     )),
+
+    // `qo f(args)` starts a qoroutine; the operand is a call (D-019).
+    qo_expr: $ => prec(14, seq('qo', field('call', $.call_expr))),
 
     // `&value!` is an exclusive borrow; `!` is not otherwise postfix.
     exclusive_ref_expr: $ => prec(14, seq('&', field('operand', $._expr), '!')),

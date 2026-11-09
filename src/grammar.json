@@ -2937,6 +2937,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "qo_expr"
+        },
+        {
+          "type": "SYMBOL",
           "name": "exclusive_ref_expr"
         },
         {
@@ -3582,6 +3586,27 @@
             "content": {
               "type": "SYMBOL",
               "name": "_expr"
+            }
+          }
+        ]
+      }
+    },
+    "qo_expr": {
+      "type": "PREC",
+      "value": 14,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "qo"
+          },
+          {
+            "type": "FIELD",
+            "name": "call",
+            "content": {
+              "type": "SYMBOL",
+              "name": "call_expr"
             }
           }
         ]

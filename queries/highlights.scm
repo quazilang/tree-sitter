@@ -2,7 +2,7 @@
 [
   "fn" "struct" "union" "trait" "enum" "impl" "type" "import"
   "for" "if" "else" "match" "ret"
-  "const" "var" "pub" "unsafe" "as" "dyn" "for"
+  "const" "var" "pub" "unsafe" "qo" "as" "dyn" "for"
 ] @keyword
 
 ; Control flow keywords get a more specific scope

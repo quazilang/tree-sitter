@@ -1,0 +1,29 @@
+================================================================================
+qo starts a qoroutine from a call
+================================================================================
+
+fn main() i32 {
+    const h: Qoroutine[i64] = qo square(n);
+    h.join()
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (const_stmt
+        (identifier)
+        (named_type
+          (qualified_identifier
+            (identifier)))
+        (qo_expr
+          (call_expr
+            (identifier)
+            (call_arg
+              (identifier)))))
+      (call_expr
+        (field_expr
+          (identifier)
+          (identifier))))))
