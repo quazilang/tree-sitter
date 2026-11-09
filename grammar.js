@@ -699,7 +699,7 @@ module.exports = grammar({
       token.immediate('"'),
     ),
     string_content: $ => token.immediate(prec(1, /[^"\\{}]+/)),
-    escape_sequence: $ => token.immediate(/\\(u\{[0-9a-fA-F]+\}|[\s\S])/),
+    escape_sequence: $ => token.immediate(/\\(u\{[0-9a-fA-F_]+\}|[\s\S])/),
     brace_escape: $ => token.immediate(choice('{{', '}}')),
     interpolation: $ => seq(
       token.immediate('{'),

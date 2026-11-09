@@ -4714,7 +4714,7 @@
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\\\(u\\{[0-9a-fA-F]+\\}|[\\s\\S])"
+        "value": "\\\\(u\\{[0-9a-fA-F_]+\\}|[\\s\\S])"
       }
     },
     "brace_escape": {
