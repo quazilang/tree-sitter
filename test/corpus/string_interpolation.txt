@@ -1,0 +1,46 @@
+================================================================================
+string interpolation, specs, brace escapes and placeholders (D-020)
+================================================================================
+
+fn f() void {
+    const a = "hi {name}, {x:X} {{lit}} \u{1F980}";
+    io.println("{} and {:X}", a, b);
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (block
+      (const_stmt
+        (identifier)
+        (string_literal
+          (string_content)
+          (interpolation
+            (identifier))
+          (string_content)
+          (interpolation
+            (identifier)
+            (format_spec))
+          (string_content)
+          (brace_escape)
+          (string_content)
+          (brace_escape)
+          (string_content)
+          (escape_sequence)))
+      (expr_stmt
+        (call_expr
+          (field_expr
+            (identifier)
+            (identifier))
+          (call_arg
+            (string_literal
+              (format_placeholder)
+              (string_content)
+              (format_placeholder
+                (format_spec))))
+          (call_arg
+            (identifier))
+          (call_arg
+            (identifier)))))))

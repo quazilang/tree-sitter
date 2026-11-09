@@ -684,7 +684,35 @@ module.exports = grammar({
       /[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?/,
       /[0-9]+[eE][+-]?[0-9]+/,
     )),
-    string_literal: $ => /"([^"\\]|\\[\s\S])*"/,
+    // Every quoted literal is a format string (D-020): `{expr[:spec]}`
+    // interpolates, `{}`/`{:spec}` are format-call placeholders, `{{`/`}}`
+    // are literal braces. Raw strings stay opaque.
+    string_literal: $ => seq(
+      '"',
+      repeat(choice(
+        $.string_content,
+        $.escape_sequence,
+        $.brace_escape,
+        $.interpolation,
+        $.format_placeholder,
+      )),
+      token.immediate('"'),
+    ),
+    string_content: $ => token.immediate(prec(1, /[^"\\{}]+/)),
+    escape_sequence: $ => token.immediate(/\\(u\{[0-9a-fA-F]+\}|[\s\S])/),
+    brace_escape: $ => token.immediate(choice('{{', '}}')),
+    interpolation: $ => seq(
+      token.immediate('{'),
+      field('value', $._expr),
+      optional(seq(':', field('spec', $.format_spec))),
+      '}',
+    ),
+    format_placeholder: $ => seq(
+      token.immediate('{'),
+      optional(seq(':', field('spec', $.format_spec))),
+      '}',
+    ),
+    format_spec: $ => token.immediate(/[^}]+/),
     byte_string_literal: $ => choice(
       /b"([^"\\]|\\.)*"/,
       /br"[^"]*"/,

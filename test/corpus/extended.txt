@@ -25,7 +25,8 @@ fn classify(x: i32) str {
             (match_pattern
               (literal_pattern
                 (integer_literal)))
-            (string_literal))
+            (string_literal
+              (string_content)))
           (match_arm
             (match_pattern
               (variant_pattern
@@ -33,11 +34,13 @@ fn classify(x: i32) str {
             (binary_expr
               (identifier)
               (integer_literal))
-            (string_literal))
+            (string_literal
+              (string_content)))
           (match_arm
             (match_pattern
               (wildcard_pattern))
-            (string_literal)))))))
+            (string_literal
+              (string_content))))))))
 
 ==================
 enum match with nested payload patterns
@@ -77,7 +80,8 @@ fn handle(msg: Message) void {
                 (identifier)
                 (identifier))
               (call_arg
-                (string_literal))
+                (string_literal
+                  (format_placeholder)))
               (call_arg
                 (identifier))))
           (match_arm
@@ -90,7 +94,8 @@ fn handle(msg: Message) void {
                 (identifier)
                 (identifier))
               (call_arg
-                (string_literal)))))))))
+                (string_literal
+                  (string_content))))))))))
 
 ==================
 closure expression
@@ -339,11 +344,13 @@ fn separator() str { ret "/"; }
       (identifier)
       (attr_arg
         (identifier)
-        (string_literal)))
+        (string_literal
+          (string_content))))
     (identifier)
     (block
       (return_stmt
-        (string_literal)))))
+        (string_literal
+          (string_content))))))
 
 ==================
 slice expression with step
@@ -427,11 +434,13 @@ fn main() i32 {
           (call_arg
             (named_arg
               (identifier)
-              (string_literal)))
+              (string_literal
+                (string_content))))
           (call_arg
             (named_arg
               (identifier)
-              (string_literal)))))
+              (string_literal
+                (string_content))))))
       (return_stmt
         (integer_literal)))))
 

@@ -54,7 +54,8 @@ fn main() i32 {
             (identifier)
             (identifier))
           (call_arg
-            (string_literal))
+            (string_literal
+              (format_placeholder)))
           (call_arg
             (index_expr
               (identifier)
@@ -145,7 +146,8 @@ pub import std.windows.*;
       (identifier)
       (attr_arg
         (identifier)
-        (string_literal)))
+        (string_literal
+          (string_content))))
     (import_path
       (identifier)
       (identifier))
@@ -227,12 +229,14 @@ struct User {
       (attribute
         (identifier)
         (attr_arg
-          (string_literal)))
+          (string_literal
+            (string_content))))
       (attribute
         (identifier)
         (attr_arg
           (identifier)
-          (string_literal))))
+          (string_literal
+            (string_content)))))
     (struct_field
       (identifier)
       (attribute
@@ -246,7 +250,8 @@ struct User {
       (attribute
         (identifier)
         (attr_arg
-          (string_literal)))))
+          (string_literal
+            (string_content))))))
   (union_decl
     (attribute
       (identifier)

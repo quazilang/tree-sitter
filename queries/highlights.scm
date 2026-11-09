@@ -54,6 +54,11 @@
 (integer_literal) @number
 (float_literal)   @number.float
 (string_literal)  @string
+(escape_sequence) @string.escape
+(brace_escape) @string.escape
+(interpolation "{" @punctuation.special "}" @punctuation.special)
+(format_placeholder) @punctuation.special
+(format_spec) @string.special
 (byte_string_literal) @string
 (raw_string_literal) @string
 (bool_literal)    @boolean
