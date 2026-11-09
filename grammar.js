@@ -401,7 +401,22 @@ module.exports = grammar({
       $.wildcard_pattern,
       $.literal_pattern,
       $.variant_pattern,
+      $.struct_pattern,
     ),
+
+    // `Point { x, y: 0, .. }` destructures a struct.
+    struct_pattern: $ => seq(
+      field('name', $.identifier),
+      '{',
+      commaSep(choice($.field_pattern, $.rest_pattern)),
+      optional(','),
+      '}',
+    ),
+    field_pattern: $ => seq(
+      field('field', $.identifier),
+      optional(seq(':', field('pattern', $.match_pattern))),
+    ),
+    rest_pattern: $ => '..',
 
     wildcard_pattern: $ => '_',
     literal_pattern: $ => choice(

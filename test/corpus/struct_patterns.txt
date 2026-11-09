@@ -1,0 +1,44 @@
+================================================================================
+struct patterns with literal, shorthand and rest fields
+================================================================================
+
+fn f(p: Point) i64 {
+    match p {
+        Point { x: 0, y } => y,
+        Point { x, .. } => x,
+    }
+}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (named_type
+        (qualified_identifier
+          (identifier))))
+    (block
+      (match_expr
+        (identifier)
+        (match_arm
+          (match_pattern
+            (struct_pattern
+              (identifier)
+              (field_pattern
+                (identifier)
+                (match_pattern
+                  (literal_pattern
+                    (integer_literal))))
+              (field_pattern
+                (identifier))))
+          (identifier))
+        (match_arm
+          (match_pattern
+            (struct_pattern
+              (identifier)
+              (field_pattern
+                (identifier))
+              (rest_pattern)))
+          (identifier))))))
