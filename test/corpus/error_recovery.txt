@@ -1,0 +1,87 @@
+================================================================================
+missing semicolon before a closing brace keeps the next declaration
+================================================================================
+
+fn first() i32 { ret 1 }
+
+fn second() i32 { ret 2; }
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (return_stmt (integer_literal) (MISSING ";")))) (fn_decl (identifier) (block (return_stmt (integer_literal)))))
+
+================================================================================
+missing initializer stays inside its statement
+================================================================================
+
+fn broken() void {
+    const x: i32 = ;
+}
+
+fn intact() i32 { ret 3; }
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (const_stmt (identifier) (MISSING identifier)))) (fn_decl (identifier) (block (return_stmt (integer_literal)))))
+
+================================================================================
+unclosed call arguments recover before the next item
+================================================================================
+
+fn call() void {
+    helper(1, 2;
+}
+
+struct Point { x: i32, y: i32, }
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (expr_stmt (call_expr (identifier) (call_arg (integer_literal)) (call_arg (integer_literal)) (MISSING ")"))))) (struct_decl (identifier) (struct_field (identifier)) (struct_field (identifier))))
+
+================================================================================
+stray closing brace at top level
+================================================================================
+
+fn ok() void {}
+}
+fn after() void {}
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block)) (ERROR) (fn_decl (identifier) (block)))
+
+================================================================================
+unterminated block at end of file
+================================================================================
+
+fn open() void {
+    const a: i32 = 1;
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (const_stmt (identifier) (integer_literal)) (MISSING "}"))))
+
+================================================================================
+comparison chain is not a generic argument list
+================================================================================
+
+fn main() void {
+    const a = b < c > (d);
+}
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (const_stmt (identifier) (binary_expr (binary_expr (identifier) (identifier)) (paren_expr (identifier)))))))
+
+================================================================================
+member access continues across a line break
+================================================================================
+
+fn main() void {
+    value.
+    other();
+}
+
+--------------------------------------------------------------------------------
+
+(source_file (fn_decl (identifier) (block (expr_stmt (call_expr (field_expr (identifier) (identifier)))))))
