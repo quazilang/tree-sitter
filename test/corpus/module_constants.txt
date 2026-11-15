@@ -1,0 +1,25 @@
+================================================================================
+Module-level constants
+================================================================================
+
+pub const LIMIT: i32 = 10;
+const HALF: i32 = LIMIT / 2;
+
+fn main() i32 { ret HALF; }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (const_item
+    name: (identifier)
+    value: (integer_literal))
+  (const_item
+    name: (identifier)
+    value: (binary_expr
+      lhs: (identifier)
+      rhs: (integer_literal)))
+  (fn_decl
+    name: (identifier)
+    (block
+      (return_stmt
+        (identifier)))))

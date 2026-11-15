@@ -66,6 +66,21 @@ module.exports = grammar({
       $.impl_decl,
       $.type_alias,
       $.foreign_global,
+      $.const_item,
+    ),
+
+    // Module-level constant (compiler D-020 follow-up, maintainer answer В20А):
+    // `pub const LIMIT: i32 = 10;` — the type is required.
+    const_item: $ => seq(
+      repeat($.attribute),
+      optional('pub'),
+      'const',
+      field('name', $.identifier),
+      ':',
+      field('type', $._type),
+      '=',
+      field('value', $._expr),
+      ';',
     ),
 
     // import ./a; / import a.b.{x, y}; / import a.b.*; / import a.b as c;
