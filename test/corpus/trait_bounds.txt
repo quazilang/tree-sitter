@@ -1,0 +1,41 @@
+==================
+generic parameters with trait bounds
+==================
+
+struct Map[K: Hash + Eq, V] { len: usize }
+fn code[T: Hashed](x: &T) u64 { ret x.hash_code(); }
+
+---
+
+(source_file
+  (struct_decl
+    (identifier)
+    (generic_params
+      (generic_param
+        (identifier)
+        (trait_bounds
+          (identifier)
+          (identifier)))
+      (generic_param
+        (identifier)))
+    (struct_field
+      (identifier)))
+  (fn_decl
+    (identifier)
+    (generic_params
+      (generic_param
+        (identifier)
+        (trait_bounds
+          (identifier))))
+    (param
+      (identifier)
+      (ref_type
+        (named_type
+          (qualified_identifier
+            (identifier)))))
+    (block
+      (return_stmt
+        (call_expr
+          (field_expr
+            (identifier)
+            (identifier)))))))

@@ -138,7 +138,14 @@ module.exports = grammar({
       choice($.block, ';'),
     ),
 
-    generic_params: $ => seq('[', commaSep1($.identifier), ']'),
+    generic_params: $ => seq('[', commaSep1($.generic_param), ']'),
+
+    generic_param: $ => seq(
+      field('name', $.identifier),
+      optional(seq(':', field('bound', $.trait_bounds))),
+    ),
+
+    trait_bounds: $ => seq($.identifier, repeat(seq('+', $.identifier))),
 
     // The compiler accepts a Quazi variadic parameter (`...rest: T`) or a
     // bare C variadic marker (`...`) only in the final position. Keep that

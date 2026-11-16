@@ -3997,6 +3997,32 @@
     }
   },
   {
+    "type": "generic_param",
+    "named": true,
+    "fields": {
+      "bound": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "trait_bounds",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "generic_params",
     "named": true,
     "fields": {},
@@ -4005,7 +4031,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "generic_param",
           "named": true
         }
       ]
@@ -7707,6 +7733,21 @@
         },
         {
           "type": "rest_pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "trait_bounds",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]

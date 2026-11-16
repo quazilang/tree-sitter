@@ -316,8 +316,10 @@ pub enum Result[T, E] {
   (enum_decl
     (identifier)
     (generic_params
-      (identifier)
-      (identifier))
+      (generic_param
+        (identifier))
+      (generic_param
+        (identifier)))
     (enum_variant
       (identifier)
       (named_type
