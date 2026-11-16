@@ -4,6 +4,7 @@ generic parameters with trait bounds
 
 struct Map[K: Hash + Eq, V] { len: usize }
 fn code[T: Hashed](x: &T) u64 { ret x.hash_code(); }
+fn tagged[T: marks.Tag](x: &T) u64 { ret 1; }
 
 ---
 
@@ -14,8 +15,10 @@ fn code[T: Hashed](x: &T) u64 { ret x.hash_code(); }
       (generic_param
         (identifier)
         (trait_bounds
-          (identifier)
-          (identifier)))
+          (bound_path
+            (identifier))
+          (bound_path
+            (identifier))))
       (generic_param
         (identifier)))
     (struct_field
@@ -26,7 +29,8 @@ fn code[T: Hashed](x: &T) u64 { ret x.hash_code(); }
       (generic_param
         (identifier)
         (trait_bounds
-          (identifier))))
+          (bound_path
+            (identifier)))))
     (param
       (identifier)
       (ref_type
@@ -38,4 +42,22 @@ fn code[T: Hashed](x: &T) u64 { ret x.hash_code(); }
         (call_expr
           (field_expr
             (identifier)
-            (identifier)))))))
+            (identifier))))))
+  (fn_decl
+    (identifier)
+    (generic_params
+      (generic_param
+        (identifier)
+        (trait_bounds
+          (bound_path
+            (identifier)
+            (identifier)))))
+    (param
+      (identifier)
+      (ref_type
+        (named_type
+          (qualified_identifier
+            (identifier)))))
+    (block
+      (return_stmt
+        (integer_literal)))))

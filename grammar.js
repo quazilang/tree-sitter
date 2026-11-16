@@ -145,7 +145,9 @@ module.exports = grammar({
       optional(seq(':', field('bound', $.trait_bounds))),
     ),
 
-    trait_bounds: $ => seq($.identifier, repeat(seq('+', $.identifier))),
+    trait_bounds: $ => seq($.bound_path, repeat(seq('+', $.bound_path))),
+
+    bound_path: $ => seq($.identifier, repeat(seq('.', $.identifier))),
 
     // The compiler accepts a Quazi variadic parameter (`...rest: T`) or a
     // bare C variadic marker (`...`) only in the final position. Keep that

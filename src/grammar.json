@@ -674,7 +674,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "bound_path"
         },
         {
           "type": "REPEAT",
@@ -684,6 +684,31 @@
               {
                 "type": "STRING",
                 "value": "+"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "bound_path"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "bound_path": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "."
               },
               {
                 "type": "SYMBOL",

@@ -27,7 +27,7 @@
 (impl_decl   first_type: (named_type (qualified_identifier (identifier) @type)))
 (impl_decl   for_type: (named_type (qualified_identifier (identifier) @type)))
 (generic_param name: (identifier) @type)
-(trait_bounds (identifier) @type)
+(bound_path (identifier) @type)
 
 ; Enum variants
 (enum_variant name: (identifier) @constant)

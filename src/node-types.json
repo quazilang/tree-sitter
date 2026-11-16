@@ -964,6 +964,21 @@
     "fields": {}
   },
   {
+    "type": "bound_path",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "break_stmt",
     "named": true,
     "fields": {}
@@ -7747,7 +7762,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "bound_path",
           "named": true
         }
       ]
