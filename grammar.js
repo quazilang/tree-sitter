@@ -233,7 +233,9 @@ module.exports = grammar({
       '}',
     ),
 
+    // Attributes such as `@associated` mark trait methods without a receiver.
     trait_method: $ => seq(
+      repeat($.attribute),
       'fn',
       field('name', $.identifier),
       optional($.generic_params),
@@ -620,7 +622,9 @@ module.exports = grammar({
       ')',
     )),
 
-    call_arg: $ => choice($.named_arg, $._expr),
+    call_arg: $ => choice($.named_arg, $.spread_arg, $._expr),
+    // `...values` forwards a variadic parameter; the compiler requires it last.
+    spread_arg: $ => seq('...', field('value', $._expr)),
     named_arg: $ => seq(
       field('name', $.identifier),
       '=',

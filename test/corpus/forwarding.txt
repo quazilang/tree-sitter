@@ -1,0 +1,54 @@
+==================
+Associated trait method attribute
+==================
+
+trait Deserialize {
+    @associated fn from_json(source: str) Self;
+}
+
+---
+
+(source_file
+  (trait_decl
+    name: (identifier)
+    (trait_method
+      (attribute
+        name: (identifier))
+      name: (identifier)
+      (trait_param
+        name: (identifier))
+      return_type: (named_type
+        (qualified_identifier
+          (identifier))))))
+
+==================
+Forwarded variadic argument
+==================
+
+fn writef(template: str, ...args: Display) void {
+    write_formatted(1, template, ...args);
+}
+
+---
+
+(source_file
+  (fn_decl
+    name: (identifier)
+    (param
+      name: (identifier))
+    (variadic_param
+      name: (identifier)
+      type: (named_type
+        (qualified_identifier
+          (identifier))))
+    (block
+      (expr_stmt
+        (call_expr
+          callee: (identifier)
+          (call_arg
+            (integer_literal))
+          (call_arg
+            (identifier))
+          (call_arg
+            (spread_arg
+              value: (identifier))))))))

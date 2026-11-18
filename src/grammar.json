@@ -1257,6 +1257,13 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "attribute"
+          }
+        },
+        {
           "type": "STRING",
           "value": "fn"
         },
@@ -4186,7 +4193,28 @@
         },
         {
           "type": "SYMBOL",
+          "name": "spread_arg"
+        },
+        {
+          "type": "SYMBOL",
           "name": "_expr"
+        }
+      ]
+    },
+    "spread_arg": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "..."
+        },
+        {
+          "type": "FIELD",
+          "name": "value",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expr"
+          }
         }
       ]
     },
