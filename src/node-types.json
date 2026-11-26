@@ -6272,7 +6272,18 @@
   {
     "type": "ptr_type",
     "named": true,
-    "fields": {},
+    "fields": {
+      "exclusive": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "!",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": false,
       "required": false,

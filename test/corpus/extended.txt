@@ -483,3 +483,22 @@ fn broken() void {
         (identifier)
         (integer_literal))
       (MISSING "}"))))
+
+================================================================================
+Writable raw pointer types
+================================================================================
+
+unsafe fn fill(out: *u8!, slot: **u8!) void {}
+
+---
+
+(source_file
+  (fn_decl
+    (identifier)
+    (param
+      (identifier)
+      (ptr_type))
+    (param
+      (identifier)
+      (ptr_type))
+    (block)))

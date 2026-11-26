@@ -502,7 +502,9 @@ module.exports = grammar({
     // `&Type` is a shared reference; `&Type!` is an exclusive (mutable)
     // reference. Both are parsed by the compiler in parse_type (mod.rs:1833-1850).
     ref_type: $ => seq('&', $._type, optional(field('exclusive', '!'))),
-    ptr_type: $ => choice(seq('*', $._type), seq('**', $._type)),
+    // `*Type` reads, `*Type!` reads and writes (D-027); `**Type!` makes the
+    // outer pointer writable.
+    ptr_type: $ => prec.right(seq(choice('*', '**'), $._type, optional(field('exclusive', '!')))),
     array_type: $ => seq('[', $._type, ';', $.integer_literal, ']'),
     flexible_array_type: $ => seq('[', $._type, ';', '..', ']'),
     slice_type: $ => seq('[', $._type, ']'),
